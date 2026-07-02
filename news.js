@@ -42,6 +42,7 @@ window.WildfireNews = (function () {
   /** Only ever link/load http(s) URLs — cached rows originate from third-party
       RSS feeds, so schemes like javascript: must never reach an href. */
   function safeUrl(u) {
+    if (!u || typeof u !== 'string') return ''; // null would coerce to a relative "/null" URL
     try {
       const p = new URL(u, location.href);
       return (p.protocol === 'http:' || p.protocol === 'https:') ? p.href : '';
@@ -87,9 +88,18 @@ window.WildfireNews = (function () {
   function cardHtml(row) {
     const official = row.is_official_source;
     const iu = safeUrl(row.image_url);
-    // An <img> (not a CSS background) so the URL can't escape into style context.
-    const img = iu ? `<img class="nc-thumb" src="${esc(iu)}" alt="" loading="lazy"/>` : '';
     const href = safeUrl(row.article_url);
+    // Real article image when the feed provides one (rare for RSS); otherwise a
+    // source-logo tile via Google's favicon service — always available, and it
+    // identifies the outlet at a glance. Broken images collapse to the tile.
+    let dom = (row.domain || '').replace(/^www\./, '');
+    if (!dom && href) { try { dom = new URL(href).hostname.replace(/^www\./, ''); } catch { /* noop */ } }
+    const favicon = dom
+      ? `<span class="nc-thumb nc-favicon${official ? ' is-official' : ''}"><img src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(dom)}&sz=64" alt="" loading="lazy" width="28" height="28" onerror="this.remove()"/></span>`
+      : '';
+    const img = iu
+      ? `<img class="nc-thumb" src="${esc(iu)}" alt="" loading="lazy" onerror="this.remove()"/>`
+      : favicon;
     return `
       <article class="news-card${official ? ' is-official' : ''}">
         ${img}

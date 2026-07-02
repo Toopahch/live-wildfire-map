@@ -679,6 +679,13 @@ a:hover { text-decoration: underline; }
 .news-card.is-official { border-color: rgba(52,211,153,.32); background: linear-gradient(180deg, rgba(52,211,153,.07), rgba(52,211,153,.02)); }
 
 .nc-thumb { flex: 0 0 58px; width: 58px; height: 58px; border-radius: 9px; background: var(--panel-2); object-fit: cover; }
+/* Source-logo tile shown when the article has no image of its own */
+.nc-favicon {
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+}
+.nc-favicon img { width: 28px; height: 28px; border-radius: 6px; }
+.nc-favicon.is-official { background: rgba(52,211,153,.10); border-color: rgba(52,211,153,.28); }
 .nc-main { min-width: 0; flex: 1; }
 .nc-badge {
   display: inline-block; margin-bottom: 5px;
