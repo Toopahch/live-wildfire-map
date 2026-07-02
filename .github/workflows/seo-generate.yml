@@ -1,0 +1,33 @@
+# Regenerates the static SEO landing pages + sitemap from live NIFC data so the
+# server-rendered numbers stay fresh for crawlers. Pages also hydrate live
+# numbers client-side, so this just keeps the crawlable HTML current.
+#
+# Requires: repo on GitHub with Actions enabled. If you deploy via GitHub Pages,
+# the committed changes auto-deploy. Adjust the cron to your preference.
+name: Refresh SEO pages
+
+on:
+  schedule:
+    - cron: "17 6,18 * * *"   # 06:17 and 18:17 UTC daily
+  workflow_dispatch: {}         # allow manual runs
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Generate SEO pages + sitemap
+        run: node seo/generate.mjs
+      - name: Commit if changed
+        run: |
+          git config user.name "seo-bot"
+          git config user.email "seo-bot@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: refresh SEO pages [skip ci]"
+          git push

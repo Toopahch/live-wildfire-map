@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Live Wildfire Map — a real-time interactive satellite map of active U.S. wildfires showing size, containment, smoke forecast, and the latest official news and updates for each fire. Auto-updating from NIFC, NOAA, and NASA data." />
+  <meta name="theme-color" content="#0b0e14" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="Live Wildfire Map" />
+  <title>Live Wildfire Map · Interactive U.S. Fire Tracker & News</title>
+
+  <!-- Canonical + social cards (SEO) -->
+  <link rel="canonical" href="https://livewildfiremap.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Live Wildfire Map" />
+  <meta property="og:title" content="Live Wildfire Map · Interactive U.S. Fire Tracker & News" />
+  <meta property="og:description" content="Track active U.S. wildfires in real time — size, containment, smoke forecast, and the latest official news for each fire." />
+  <meta property="og:url" content="https://livewildfiremap.com/" />
+  <meta property="og:image" content="https://livewildfiremap.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Live Wildfire Map — real-time map of active U.S. wildfires" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Live Wildfire Map · Interactive U.S. Fire Tracker & News" />
+  <meta name="twitter:description" content="Real-time map of active U.S. wildfires with size, containment, smoke forecast, and latest news." />
+  <meta name="twitter:image" content="https://livewildfiremap.com/og-image.png" />
+
+  <!-- Structured data for rich search results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://livewildfiremap.com/#website",
+        "name": "Live Wildfire Map",
+        "url": "https://livewildfiremap.com/",
+        "publisher": { "@id": "https://livewildfiremap.com/#organization" },
+        "description": "Real-time interactive map of active U.S. wildfires with size, containment, smoke forecast, and the latest official news and updates for each fire."
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://livewildfiremap.com/#webapp",
+        "name": "Live Wildfire Map",
+        "url": "https://livewildfiremap.com/",
+        "applicationCategory": "MapApplication",
+        "operatingSystem": "Web",
+        "browserRequirements": "Requires JavaScript",
+        "publisher": { "@id": "https://livewildfiremap.com/#organization" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "description": "Interactive satellite map tracking active wildfires across the United States, including fire size, percent contained, smoke forecast, wind drift, and the latest official news for each incident."
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://livewildfiremap.com/#organization",
+        "name": "Live Wildfire Map",
+        "url": "https://livewildfiremap.com/",
+        "logo": "https://livewildfiremap.com/logo.svg",
+        "description": "Real-time interactive map and tracker of active U.S. wildfires, smoke forecast, and fire news."
+      }
+    ]
+  }
+  </script>
+
+  <!-- Favicon: the flame + live-signal logo (PNG touch icon — iOS ignores SVG) -->
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- Warm the connections that gate first paint: fonts, Leaflet CDN, and the
+       Esri tile + NIFC data origins the map hits the moment scripts run. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preconnect" href="https://server.arcgisonline.com" />
+  <link rel="preconnect" href="https://services3.arcgis.com" />
+  <link rel="dns-prefetch" href="https://services2.arcgis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <link rel="stylesheet" href="styles.css?v=2" />
+</head>
+<body>
+  <a class="skip-link" href="#fire-list">Skip to fire list</a>
+  <a class="skip-link" href="#map">Skip to map</a>
+  <!-- Screen-reader status line (result counts etc.) — updated from app.js -->
+  <div id="sr-status" class="visually-hidden" role="status" aria-live="polite"></div>
+
+  <!-- ───────────────────────────  HEADER  ─────────────────────────── -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="34" height="34" fill="none">
+          <defs>
+            <linearGradient id="wfFlameGrad" x1="8" y1="54" x2="56" y2="10" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#1f9e37"/>
+              <stop offset=".46" stop-color="#ff8a1e"/>
+              <stop offset="1" stop-color="#ff2f2f"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#wfFlameGrad)" d="M32 4c4 10-6 14-6 22a6 6 0 0 0 12 0c0-2 0-4-2-6 8 4 12 12 12 20a16 16 0 0 1-32 0c0-12 10-18 16-36z"/>
+          <g stroke="#0b7a26" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M25 33q7-8 14 0"/>
+            <path d="M21 37q11-12 22 0"/>
+            <path d="M19 43h9l3-6 3 11 3-5h8"/>
+          </g>
+        </svg>
+      </span>
+      <div class="brand-text">
+        <h1><span class="lit-live">Live</span> Wildfire&nbsp;Map</h1>
+        <p>Real-time U.S. fire intelligence</p>
+      </div>
+    </div>
+
+    <nav class="app-nav" aria-label="Site">
+      <a href="/current-wildfires/">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        <span>Current Wildfires</span>
+      </a>
+    </nav>
+
+    <div class="header-meta">
+      <div class="status-pill" id="status-pill" data-state="loading" role="status">
+        <span class="status-dot"></span>
+        <span class="status-label" id="status-label">Connecting…</span>
+      </div>
+      <div class="meta-block">
+        <span class="meta-label">Last updated</span>
+        <span class="meta-value" id="last-updated">—</span>
+      </div>
+      <div class="meta-block">
+        <span class="meta-label">Next refresh</span>
+        <span class="meta-value mono" id="countdown">—</span>
+      </div>
+      <button class="refresh-btn" id="refresh-btn" title="Refresh now" aria-label="Refresh data now">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/>
+        </svg>
+        <span>Refresh</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ───────────────────────────  LAYOUT  ─────────────────────────── -->
+  <main class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <section class="stats" id="stats">
+        <article class="stat-card" data-tone="hot">
+          <span class="stat-value" id="stat-count">—</span>
+          <span class="stat-label" id="stat-count-label">Active fires</span>
+        </article>
+        <article class="stat-card" data-tone="ember">
+          <span class="stat-value" id="stat-acres">—</span>
+          <span class="stat-label">Acres affected</span>
+        </article>
+        <article class="stat-card" data-tone="cool">
+          <span class="stat-value" id="stat-contained">—</span>
+          <span class="stat-label">Avg. contained</span>
+        </article>
+        <article class="stat-card" data-tone="neutral">
+          <span class="stat-value" id="stat-states">—</span>
+          <span class="stat-label">States affected</span>
+        </article>
+      </section>
+
+      <section class="controls">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="search" id="search" placeholder="Search city, ZIP, fire, county…"
+                 aria-label="Search by city, ZIP code, fire name, or county — press Enter to search the map by place"
+                 autocomplete="off" spellcheck="false" />
+          <kbd class="search-hint" id="search-hint" aria-hidden="true">↵</kbd>
+        </div>
+
+        <div class="segmented" id="filter" role="group" aria-label="Filter fires">
+          <button class="seg-btn is-active" data-filter="active" aria-pressed="true">Active</button>
+          <button class="seg-btn" data-filter="contained" aria-pressed="false">Contained</button>
+          <button class="seg-btn" data-filter="all" aria-pressed="false">All</button>
+        </div>
+
+        <div class="sort-row">
+          <label for="sort">Sort</label>
+          <select id="sort">
+            <option value="size">Largest first</option>
+            <option value="containment">Least contained</option>
+            <option value="newest">Most recent</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="locate-banner" id="locate-banner" role="status" hidden>
+        <span class="lb-pin" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.8 7-11a7 7 0 1 0-14 0c0 5.2 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        </span>
+        <span class="lb-text" id="locate-text">Near your area</span>
+        <button class="lb-clear" id="locate-clear" title="Clear location" aria-label="Clear location">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="list-head">
+        <span id="list-count">—</span>
+        <span class="list-hint">Click a fire to locate it</span>
+      </div>
+
+      <ul class="fire-list" id="fire-list">
+        <!-- fire cards injected here -->
+        <li class="skeleton-card"></li>
+        <li class="skeleton-card"></li>
+        <li class="skeleton-card"></li>
+        <li class="skeleton-card"></li>
+        <li class="skeleton-card"></li>
+      </ul>
+
+      <nav class="seo-links" aria-label="Wildfire maps">
+        <h2>Explore wildfire maps</h2>
+        <a href="/current-wildfires/">Current U.S. wildfires</a>
+        <a href="/wildfire-map/">Interactive wildfire map</a>
+        <a href="/wildfires-near-me/">Wildfires near me</a>
+        <span class="seo-links-sub">By state:</span>
+        <a href="/california-wildfire-map/">California</a>
+        <a href="/oregon-wildfire-map/">Oregon</a>
+        <a href="/washington-wildfire-map/">Washington</a>
+        <a href="/colorado-wildfire-map/">Colorado</a>
+        <a href="/utah-wildfire-map/">Utah</a>
+        <a href="/arizona-wildfire-map/">Arizona</a>
+        <a href="/montana-wildfire-map/">Montana</a>
+        <a href="/idaho-wildfire-map/">Idaho</a>
+        <a href="/nevada-wildfire-map/">Nevada</a>
+        <a href="/new-mexico-wildfire-map/">New Mexico</a>
+        <a href="/wyoming-wildfire-map/">Wyoming</a>
+        <a href="/texas-wildfire-map/">Texas</a>
+        <a href="/oklahoma-wildfire-map/">Oklahoma</a>
+        <a href="/alaska-wildfire-map/">Alaska</a>
+        <a href="/florida-wildfire-map/">Florida</a>
+        <a href="/nebraska-wildfire-map/">Nebraska</a>
+      </nav>
+      <footer class="sidebar-foot">
+        Data: <a href="https://data-nifc.opendata.arcgis.com/" target="_blank" rel="noopener">NIFC WFIGS</a>
+        · Smoke: <a href="https://www.noaa.gov/" target="_blank" rel="noopener">NOAA</a>
+        · Wind: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+        · Search: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">&copy;&nbsp;OpenStreetMap</a>
+        · Imagery: <a href="https://www.esri.com/" target="_blank" rel="noopener">Esri</a>
+        <span class="sf-sep">·</span> <a href="/about/">About this site</a>
+      </footer>
+    </aside>
+
+    <!-- Map -->
+    <section class="map-wrap">
+      <div id="map" role="region" aria-label="Interactive map of active U.S. wildfires. Use arrow keys to pan and plus and minus keys to zoom."></div>
+
+      <!-- Smoke & air-quality controls -->
+      <div class="smoke-panel" id="smoke-panel">
+        <button type="button" class="sp-head" aria-expanded="true" aria-controls="smoke-panel">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 14a4 4 0 0 1 4-4 5 5 0 0 1 9.6-1.5A3.5 3.5 0 1 1 18 16H7"/><path d="M6 19h12"/>
+          </svg>
+          <span>Smoke &amp; Air</span>
+          <span class="sp-chev" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </button>
+
+        <label class="sp-toggle">
+          <input type="checkbox" id="tg-current" checked />
+          <span class="sp-switch"></span>
+          <span class="sp-text"><b>Current smoke</b><small>Satellite plumes · now</small></span>
+        </label>
+        <div class="sp-legend" id="legend-current">
+          <span><i style="--c:#d8d2c4"></i>Light</span>
+          <span><i style="--c:#9c8f78"></i>Medium</span>
+          <span><i style="--c:#5c5346"></i>Heavy</span>
+        </div>
+
+        <label class="sp-toggle">
+          <input type="checkbox" id="tg-forecast" />
+          <span class="sp-switch"></span>
+          <span class="sp-text"><b>Smoke forecast</b><small>HRRR-Smoke · next 48h</small></span>
+        </label>
+        <div class="sp-legend gradient" id="legend-forecast" hidden>
+          <span class="ramp"></span>
+          <div class="ramp-labels"><span>Light</span><span>Surface smoke</span><span>Heavy</span></div>
+        </div>
+
+        <label class="sp-toggle">
+          <input type="checkbox" id="tg-wind" />
+          <span class="sp-switch"></span>
+          <span class="sp-text"><b>Wind</b><small>Drift direction</small></span>
+        </label>
+      </div>
+
+      <!-- Forecast time scrubber (fades in only when the forecast layer is on) -->
+      <div class="forecast-bar" id="forecast-bar">
+        <button class="fb-play" id="fb-play" title="Play forecast" aria-label="Play forecast">
+          <svg class="ic-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="ic-pause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" hidden><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+        <div class="fb-main">
+          <div class="fb-labels">
+            <span class="fb-valid" id="fb-valid">—</span>
+            <span class="fb-rel mono" id="fb-rel">Now</span>
+          </div>
+          <input type="range" id="fb-slider" min="0" max="0" value="0" step="1" aria-label="Forecast hour" />
+          <div class="fb-ticks"><span>Now</span><span>+12h</span><span>+24h</span><span>+36h</span><span>+48h</span></div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend" id="legend">
+        <div class="legend-title">Containment</div>
+        <ul>
+          <li><span class="swatch" style="--c:#ef4444"></span>&lt; 30%</li>
+          <li><span class="swatch" style="--c:#fb923c"></span>30–60%</li>
+          <li><span class="swatch" style="--c:#fbbf24"></span>60–90%</li>
+          <li><span class="swatch" style="--c:#34d399"></span>&ge; 90%</li>
+        </ul>
+        <div class="legend-note">Marker size ∝ fire area</div>
+      </div>
+
+      <!-- Latest News & Updates panel (opens beside the popup when a fire is selected) -->
+      <aside class="news-panel" id="news-panel" aria-label="Latest news and updates for the selected fire" hidden>
+        <header class="np-head">
+          <div class="np-headtext">
+            <span class="np-kicker">Latest News &amp; Updates</span>
+            <h2 class="np-fire" id="np-fire">—</h2>
+            <p class="np-summary" id="np-summary"></p>
+          </div>
+          <button class="np-close" id="np-close" aria-label="Close news panel">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </header>
+        <div class="np-body" id="np-body"></div>
+        <footer class="np-foot">
+          <p class="np-checked" id="np-checked"></p>
+          <p class="np-disclaimer">
+            <strong>Always follow local authorities</strong> for evacuation orders and emergency
+            information. News shown here is for situational awareness only.
+          </p>
+        </footer>
+      </aside>
+
+      <!-- Loading overlay -->
+      <div class="overlay" id="overlay">
+        <div class="spinner"></div>
+        <p id="overlay-text">Loading live fire data…</p>
+        <button class="retry-btn" id="retry-btn" hidden>Try again</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- SEO / accessibility fallback: descriptive content for crawlers & no-JS -->
+  <noscript>
+    <section style="max-width:720px;margin:24px auto;padding:0 20px;color:#e8edf5;font-family:sans-serif;">
+      <h2>Live Wildfire Map — Active U.S. Wildfire Tracker</h2>
+      <p>Live Wildfire Map is a real-time, interactive satellite map of active wildfires across the
+        United States. For each fire it shows the location, size in acres, percent contained, cause,
+        a smoke forecast and wind drift, and the latest official news and updates from sources such as
+        InciWeb, NIFC, CAL FIRE, the U.S. Forest Service, and local agencies. Data updates automatically.</p>
+      <p>This site requires JavaScript to display the interactive map. Always follow local authorities
+        for evacuation orders and emergency information.</p>
+    </section>
+  </noscript>
+
+  <!-- Leaflet JS -->
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script defer src="config.js?v=2"></script>
+  <script defer src="news.js?v=2"></script>
+  <script defer src="app.js?v=2"></script>
+</body>
+</html>

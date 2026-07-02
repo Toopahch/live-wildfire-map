@@ -1,0 +1,10 @@
+# Live Wildfire Map — robots.txt
+# admin.html is intentionally NOT disallowed here — it carries a noindex meta tag,
+# and blocking it would stop Google from crawling it to SEE that noindex. Backend
+# source folders (no HTML) are blocked.
+User-agent: *
+Allow: /
+Disallow: /supabase/
+Disallow: /seo/
+
+Sitemap: https://livewildfiremap.com/sitemap.xml

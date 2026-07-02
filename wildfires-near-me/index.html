@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Wildfires Near Me — Find Active Wildfires by ZIP Code or City</title>
+<meta name="description" content="Find active wildfires near you. Use your location or search any ZIP code, city, or county to see the closest fires by distance, with size and containment. Live U.S. data."/>
+<link rel="canonical" href="https://livewildfiremap.com/wildfires-near-me/"/>
+<meta name="robots" content="index, follow, max-image-preview:large"/>
+<meta name="theme-color" content="#0b0e14"/>
+<meta name="color-scheme" content="dark"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Live Wildfire Map"/>
+<meta property="og:title" content="Wildfires Near Me — Find Active Wildfires by ZIP Code or City"/>
+<meta property="og:description" content="Find active wildfires near you. Use your location or search any ZIP code, city, or county to see the closest fires by distance, with size and containment. Live U.S. data."/>
+<meta property="og:url" content="https://livewildfiremap.com/wildfires-near-me/"/>
+<meta property="og:image" content="https://livewildfiremap.com/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="Live Wildfire Map — real-time map of active U.S. wildfires"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Wildfires Near Me — Find Active Wildfires by ZIP Code or City"/>
+<meta name="twitter:description" content="Find active wildfires near you. Use your location or search any ZIP code, city, or county to see the closest fires by distance, with size and containment. Live U.S. data."/>
+<meta name="twitter:image" content="https://livewildfiremap.com/og-image.png"/>
+<link rel="icon" type="image/svg+xml" href="/logo.svg"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="dns-prefetch" href="https://unpkg.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/landing.css?v=2"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://livewildfiremap.com/#organization","name":"Live Wildfire Map","url":"https://livewildfiremap.com/","logo":"https://livewildfiremap.com/logo.svg","description":"Real-time interactive map and tracker of active U.S. wildfires."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://livewildfiremap.com/"},{"@type":"ListItem","position":2,"name":"Wildfires near me","item":"https://livewildfiremap.com/wildfires-near-me/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I find wildfires near me?","acceptedAnswer":{"@type":"Answer","text":"This page can check your exact area: allow location access (or search any ZIP code, city, or county on the live map) and the nearest active fires are listed by distance in miles, with their size and containment."}},{"@type":"Question","name":"Are there wildfires near my location right now?","acceptedAnswer":{"@type":"Answer","text":"Yes or no depends on your area — the fastest way to check is a location or ZIP-code search on the live wildfire map, which ranks every active fire by distance from you. You can also browse current activity state by state."}},{"@type":"Question","name":"How accurate is the location search?","acceptedAnswer":{"@type":"Answer","text":"Location search uses OpenStreetMap geocoding and works for ZIP codes, cities, counties, and landmarks across the United States. Fire positions come from official NIFC reporting."}}]}</script>
+</head>
+<body data-state="US" data-lat="39.5" data-lon="-98.35" data-zoom="4">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="wrap">
+<a class="brand" href="/"><img src="/logo.svg" alt="Live Wildfire Map logo" width="30" height="30"/><span><span class="lit">Live</span> Wildfire Map</span></a>
+<nav class="site-nav" aria-label="Primary">
+<a href="/"><span class="lit">Live</span> Map</a><a href="/current-wildfires/">Current Wildfires</a><a href="/wildfire-map/">Wildfire Map</a><a href="/wildfires-near-me/" aria-current="page">Near Me</a>
+</nav></div></header>
+<main class="wrap" id="main">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span><a href="/wildfires-near-me/">Wildfires near me</a></nav>
+<div class="hero"><h1>Wildfires Near Me — Find Active Fires by Location</h1>
+<p class="lede">Check for active wildfires near your location, ZIP code, or city. See the closest fires ranked by distance, plus their size and containment.</p>
+<p class="updated"><b class="js-count">256</b> active wildfires nationwide · Last updated <time class="js-updated" datetime="2026-07-02T00:39:21.049Z">Jul 1, 2026, 6:39 PM</time></p></div>
+<section><h2>Find wildfires near you</h2>
+<p>Use your device location to instantly see the closest active wildfires, or search your ZIP code or city on the interactive map.</p>
+<div class="cta-row"><button class="btn" id="find-near-me" type="button">Find wildfires near me</button><a class="btn secondary" href="/">Search by ZIP or city on the map</a></div>
+<div id="near-results" aria-live="polite"></div>
+<div class="map-embed"><div id="map" role="region" aria-label="Interactive wildfire map"></div>
+<div class="map-ph"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#ff8c42" stroke-width="1.6" aria-hidden="true"><path d="M9 20l-5.5 2.5V6L9 3.5m0 16.5l6 2.5m-6-2.5V3.5m6 19l5.5-2.5V2.5L15 5m0 17.5V5m0 0L9 3.5" stroke-linejoin="round"/></svg>
+<p>Map of active fires near you</p><button type="button" class="btn">Load interactive map</button></div></div></section>
+<section><h2>Understanding wildfires near your location</h2>
+<p>Knowing whether there’s a wildfire near you starts with distance, direction, and wind. A fire many miles away can still affect your air quality, while a closer fire may prompt evacuation warnings from local officials. Use the tools above to see the nearest active fires, then rely on your county and state authorities for any evacuation guidance.</p>
+<h3>How close is “near”?</h3>
+<p>There’s no single safe distance — it depends on terrain, fuels, and especially wind. Fast-moving grass and brush fires can travel miles in hours under red-flag conditions. If an active fire is within roughly 10–20 miles of you and winds are pushing it your way, monitor official alerts closely.</p>
+<h3>What to do if a fire is nearby</h3>
+<p>Sign up for your county’s emergency alerts, prepare a go-bag, know at least two evacuation routes, and follow evacuation orders immediately when they’re issued. This map is for situational awareness only and should never replace official emergency instructions.</p>
+<h3>Smoke and air quality</h3>
+<p>Even distant wildfires can send smoke into your area. Check the live smoke forecast on the interactive map and the official <a href="https://www.airnow.gov/fires/" target="_blank" rel="noopener">AirNow fire &amp; smoke map</a>, and limit outdoor activity when air quality is poor — especially for children, older adults, and anyone with respiratory conditions.</p>
+<h3>Largest active wildfires in the U.S. right now</h3>
+<p>The biggest fires currently being tracked nationwide, by acreage:</p>
+<ol class="firelist"><li><span class="rank">1</span><span><span class="fname">Cottonwood Fire</span> <span class="floc">Beaver County, UT</span></span><span class="facres">93,918 acres</span><span class="fcont">19% contained</span></li><li><span class="rank">2</span><span><span class="fname">Babylon Fire</span> <span class="floc">San Juan County, UT</span></span><span class="facres">70,735 acres</span><span class="fcont">0% contained</span></li><li><span class="rank">3</span><span><span class="fname">Iron Fire</span> <span class="floc">Juab County, UT</span></span><span class="facres">41,842 acres</span><span class="fcont">98% contained</span></li><li><span class="rank">4</span><span><span class="fname">Aspen Acres Fire</span> <span class="floc">Custer County, CO</span></span><span class="facres">35,468 acres</span><span class="fcont">0% contained</span></li><li><span class="rank">5</span><span><span class="fname">Cherry Fire</span> <span class="floc">Juab County, UT</span></span><span class="facres">34,252 acres</span><span class="fcont">76% contained</span></li><li><span class="rank">6</span><span><span class="fname">Snyder Fire</span> <span class="floc">Grand County, UT</span></span><span class="facres">30,193 acres</span><span class="fcont">49% contained</span></li></ol></section>
+<section id="states"><h2>Browse wildfire maps by state</h2>
+<p>Explore current wildfire activity, acreage, and containment for wildfire-prone states.</p>
+<div class="state-grid"><a href="/california-wildfire-map/">California <span class="n">21 active</span></a><a href="/oregon-wildfire-map/">Oregon <span class="n">18 active</span></a><a href="/washington-wildfire-map/">Washington <span class="n">18 active</span></a><a href="/idaho-wildfire-map/">Idaho <span class="n">3 active</span></a><a href="/montana-wildfire-map/">Montana <span class="n">8 active</span></a><a href="/wyoming-wildfire-map/">Wyoming <span class="n">9 active</span></a><a href="/colorado-wildfire-map/">Colorado <span class="n">16 active</span></a><a href="/utah-wildfire-map/">Utah <span class="n">8 active</span></a><a href="/nevada-wildfire-map/">Nevada <span class="n">8 active</span></a><a href="/arizona-wildfire-map/">Arizona <span class="n">16 active</span></a><a href="/new-mexico-wildfire-map/">New Mexico <span class="n">17 active</span></a><a href="/texas-wildfire-map/">Texas <span class="n">1 active</span></a><a href="/oklahoma-wildfire-map/">Oklahoma <span class="n">0 active</span></a><a href="/alaska-wildfire-map/">Alaska <span class="n">50 active</span></a><a href="/florida-wildfire-map/">Florida <span class="n">14 active</span></a><a href="/nebraska-wildfire-map/">Nebraska <span class="n">1 active</span></a></div></section>
+<section class="faq" id="faq"><h2>Frequently asked questions</h2><details><summary>How do I find wildfires near me?</summary><div class="a">This page can check your exact area: allow location access (or search any ZIP code, city, or county on the live map) and the nearest active fires are listed by distance in miles, with their size and containment.</div></details><details><summary>Are there wildfires near my location right now?</summary><div class="a">Yes or no depends on your area — the fastest way to check is a location or ZIP-code search on the live wildfire map, which ranks every active fire by distance from you. You can also browse current activity state by state.</div></details><details><summary>How accurate is the location search?</summary><div class="a">Location search uses OpenStreetMap geocoding and works for ZIP codes, cities, counties, and landmarks across the United States. Fire positions come from official NIFC reporting.</div></details></section>
+<section class="safety"><h2>Safety &amp; official sources</h2>
+<p><strong>This site is informational only and is not an emergency service.</strong> Wildfire conditions change rapidly. Always follow your local authorities and official evacuation orders. Do not rely on this map for life-safety decisions.</p>
+<div class="sources">
+
+<a href="https://inciweb.wildfire.gov/" target="_blank" rel="noopener">InciWeb (official incidents)</a>
+<a href="https://www.nifc.gov/fire-information/nfn" target="_blank" rel="noopener">NIFC Fire Information</a>
+<a href="https://www.airnow.gov/fires/" target="_blank" rel="noopener">AirNow fire &amp; smoke</a>
+<a href="https://www.ready.gov/wildfires" target="_blank" rel="noopener">Ready.gov Wildfires</a>
+<a href="https://www.weather.gov/fire/" target="_blank" rel="noopener">NWS Fire Weather</a>
+</div></section>
+</main>
+<footer class="site-footer"><div class="wrap">
+<div class="foot-cols"><div><h3>Wildfire maps</h3><a href="/wildfire-map/">Interactive map</a><a href="/current-wildfires/">Current wildfires</a><a href="/wildfires-near-me/">Wildfires near me</a><a href="/">Live dashboard</a></div><div><h3>By state</h3><a href="/california-wildfire-map/">California</a><a href="/oregon-wildfire-map/">Oregon</a><a href="/washington-wildfire-map/">Washington</a><a href="/idaho-wildfire-map/">Idaho</a><a href="/montana-wildfire-map/">Montana</a><a href="/wyoming-wildfire-map/">Wyoming</a><a href="/colorado-wildfire-map/">Colorado</a><a href="/utah-wildfire-map/">Utah</a></div><div><h3>More states</h3><a href="/nevada-wildfire-map/">Nevada</a><a href="/arizona-wildfire-map/">Arizona</a><a href="/new-mexico-wildfire-map/">New Mexico</a><a href="/texas-wildfire-map/">Texas</a><a href="/oklahoma-wildfire-map/">Oklahoma</a><a href="/alaska-wildfire-map/">Alaska</a><a href="/florida-wildfire-map/">Florida</a><a href="/nebraska-wildfire-map/">Nebraska</a></div><div><h3>About</h3><a href="/about/">About this site</a><a href="/about/#data">Data &amp; methodology</a><a href="/about/#privacy">Privacy</a><a href="/about/#contact">Contact</a></div><div><h3>Official sources</h3><a href="https://inciweb.wildfire.gov/" target="_blank" rel="noopener">InciWeb</a><a href="https://www.nifc.gov/" target="_blank" rel="noopener">NIFC</a><a href="https://www.airnow.gov/fires/" target="_blank" rel="noopener">AirNow</a><a href="https://www.ready.gov/wildfires" target="_blank" rel="noopener">Ready.gov</a></div></div>
+<div class="foot-legal">
+<p><strong>Live Wildfire Map</strong> is an informational wildfire tracker. Data is sourced from the National Interagency Fire Center (NIFC / WFIGS), NOAA, Open-Meteo, OpenStreetMap, and Esri, and may not reflect real-time conditions. It is not affiliated with any government agency. <a href="/about/">Learn how this site works</a>.</p>
+<p>Always follow local authorities and official evacuation orders for emergency information. &copy; 2026 Live Wildfire Map.</p>
+</div></div></footer>
+<script src="/landing.js?v=2" defer></script>
+</body>
+</html>

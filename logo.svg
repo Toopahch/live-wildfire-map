@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Live Wildfire Map logo">
+  <defs>
+    <linearGradient id="wfFlameGrad" x1="8" y1="54" x2="56" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1f9e37"/>
+      <stop offset=".46" stop-color="#ff8a1e"/>
+      <stop offset="1" stop-color="#ff2f2f"/>
+    </linearGradient>
+  </defs>
+  <!-- flame body: green (lower-left) → orange → red (upper-right) -->
+  <path fill="url(#wfFlameGrad)"
+        d="M32 4c4 10-6 14-6 22a6 6 0 0 0 12 0c0-2 0-4-2-6 8 4 12 12 12 20a16 16 0 0 1-32 0c0-12 10-18 16-36z"/>
+  <!-- live signal arcs + pulse line -->
+  <g stroke="#0b7a26" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M25 33q7-8 14 0"/>
+    <path d="M21 37q11-12 22 0"/>
+    <path d="M19 43h9l3-6 3 11 3-5h8"/>
+  </g>
+</svg>
