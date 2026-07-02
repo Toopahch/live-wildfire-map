@@ -734,7 +734,9 @@ a:hover { text-decoration: underline; }
      children and the map become siblings, then order them so the interactive
      map sits right below the stats and above the search controls. Desktop
      keeps its two-column grid untouched. */
-  .layout { display: flex; flex-direction: column; min-height: 0; }
+  /* height:auto + flex:none override the desktop's viewport-locked sizing —
+     without them the column squeezes the fire list to nothing (22px). */
+  .layout { display: flex; flex-direction: column; flex: 0 0 auto; height: auto; min-height: 0; }
   .sidebar { display: contents; }
   .stats         { order: 1; }
   .map-wrap      { order: 2; }
@@ -745,7 +747,10 @@ a:hover { text-decoration: underline; }
   .seo-links     { order: 7; }
   .sidebar-foot  { order: 8; }
   /* Definite scroll height so the 250-card list is browsable, not collapsed. */
-  .fire-list { flex: 0 1 auto; max-height: 46vh; }
+  .fire-list { flex: 0 1 auto; max-height: 54vh; }
+  /* Clear breathing room so the explore-links block reads as a separate
+     section, not something cutting the list off. */
+  .seo-links { margin-top: 10px; padding-top: 16px; }
   .map-wrap { height: 62vh; min-height: 380px; border-bottom: 1px solid var(--border); }
   .brand-text p { display: none; }
   .refresh-btn span { display: none; }
