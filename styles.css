@@ -642,6 +642,11 @@ a:hover { text-decoration: underline; }
 .np-fire { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; margin-top: 3px; line-height: 1.15; }
 .np-summary { font-size: 11.5px; color: var(--text-dim); margin-top: 5px; line-height: 1.4; }
 .np-summary:empty { display: none; }
+/* Color-coded stats in the summary line — mirrors the desktop popup */
+.np-summary b { font-weight: 700; }
+.np-summary .nps-acres { color: var(--ember-2); }
+.np-summary .nps-cause { color: var(--text-faint); text-transform: uppercase; font-size: 9.5px; letter-spacing: .05em; font-weight: 700; }
+.np-summary .nps-dot { color: var(--text-faint); }
 .np-close {
   flex: 0 0 auto; width: 32px; height: 32px; border-radius: 9px; cursor: pointer;
   display: grid; place-items: center; color: var(--text-dim);

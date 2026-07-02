@@ -179,7 +179,7 @@ window.WildfireNews = (function () {
     const wasOpen = el.panel.classList.contains('is-open');
     currentFireId = fire.irwin || fire.id || null;
     el.fire.textContent = (fire.name || 'This fire') + ' Fire';
-    if (el.summary) el.summary.textContent = fireSummaryLine(fire);
+    if (el.summary) el.summary.innerHTML = fireSummaryLine(fire); // values escaped in fireSummaryLine
     el.panel.hidden = false;
     document.querySelector('.map-wrap')?.classList.add('news-open');
     void el.panel.offsetHeight; // flush layout so the slide-in animates from the closed state
@@ -217,15 +217,30 @@ window.WildfireNews = (function () {
     document.dispatchEvent(new CustomEvent('wf:news-closed'));
   }
 
-  /** Compact fire summary shown under the title (key stats from the popup). */
+  /** Containment color ramp — same thresholds as the map markers/popup. */
+  function containColor(pct) {
+    const p = pct == null ? 0 : pct;
+    if (p >= 90) return '#34d399';
+    if (p >= 60) return '#fbbf24';
+    if (p >= 30) return '#fb923c';
+    return '#ef4444';
+  }
+  const titleCase = (s) => String(s || '').toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+
+  /** Compact fire summary shown under the title — color-coded to match the
+      desktop popup (ember acres, containment-ramp percentage, labeled cause). */
   function fireSummaryLine(fire) {
     const bits = [];
-    if (fire.acres != null) bits.push(Math.round(fire.acres).toLocaleString('en-US') + ' acres');
-    if (fire.contained != null) bits.push(Math.round(fire.contained) + '% contained');
+    if (fire.acres != null) {
+      bits.push(`<b class="nps-acres">${Math.round(fire.acres).toLocaleString('en-US')} acres</b>`);
+    }
+    if (fire.contained != null) {
+      bits.push(`<b style="color:${containColor(fire.contained)}">${Math.round(fire.contained)}% contained</b>`);
+    }
     const loc = [fire.county, fire.state].filter(Boolean).join(', ') || fire.stateName;
-    if (loc) bits.push(loc);
-    if (fire.cause) bits.push(fire.cause);
-    return bits.join('  ·  ');
+    if (loc) bits.push(esc(loc));
+    bits.push(`<span class="nps-cause">Cause:</span> ${esc(fire.cause ? titleCase(fire.cause) : 'Under investigation')}`);
+    return bits.join('<span class="nps-dot"> · </span>');
   }
 
   function cacheDom() {
