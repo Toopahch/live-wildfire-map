@@ -610,7 +610,9 @@ a:hover { text-decoration: underline; }
 /* A compact floating card (not a full-height drawer) — sits in the top-right and
    only grows as tall as its content, up to a cap, so it covers far less of the map. */
 .news-panel {
-  position: absolute; top: 14px; right: 14px; z-index: 680;
+  /* Above Leaflet's control layer (z 1000) so the map attribution text can't
+     bleed through the panel/bottom sheet. */
+  position: absolute; top: 14px; right: 14px; z-index: 1100;
   width: 332px; max-width: calc(100% - 28px);
   max-height: calc(100% - 28px);
   display: flex; flex-direction: column;
@@ -727,7 +729,8 @@ a:hover { text-decoration: underline; }
 }
 
 .np-foot { flex: 0 0 auto; padding: 9px 13px 11px; border-top: 1px solid var(--border); }
-.np-checked { font-size: 10px; color: var(--text-faint); margin-bottom: 6px; font-family: var(--mono); }
+/* Freshness stamp lives in the panel header, under the fire summary */
+.np-checked { font-size: 10px; color: var(--text-faint); margin-top: 5px; font-family: var(--mono); }
 .np-checked:empty { display: none; }
 .np-disclaimer {
   font-size: 10px; line-height: 1.45; color: var(--text-dim);
@@ -777,8 +780,9 @@ a:hover { text-decoration: underline; }
     border-radius: 9px;
   }
   .safety-note strong { color: var(--amber); }
-  /* …so the news bottom sheet drops its copy of it — more room for news. */
-  .np-disclaimer { display: none; }
+  /* …so the news bottom sheet drops its whole footer (the disclaimer moved to
+     the safety strip, the timestamp moved to the header) — more room for news. */
+  .np-foot { display: none; }
   /* Definite scroll height so the 250-card list is browsable, not collapsed. */
   .fire-list { flex: 0 1 auto; max-height: 54vh; }
   /* Clear breathing room so the explore-links block reads as a separate

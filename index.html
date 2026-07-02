@@ -81,7 +81,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=8" />
 </head>
 <body>
   <a class="skip-link" href="#fire-list">Skip to fire list</a>
@@ -339,6 +339,7 @@
             <span class="np-kicker">Latest News &amp; Updates</span>
             <h2 class="np-fire" id="np-fire">—</h2>
             <p class="np-summary" id="np-summary"></p>
+            <p class="np-checked" id="np-checked"></p>
           </div>
           <button class="np-close" id="np-close" aria-label="Close news panel">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -346,7 +347,6 @@
         </header>
         <div class="np-body" id="np-body"></div>
         <footer class="np-foot">
-          <p class="np-checked" id="np-checked"></p>
           <p class="np-disclaimer">
             <strong>Always follow local authorities</strong> for evacuation orders and emergency
             information. News shown here is for situational awareness only.
