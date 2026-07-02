@@ -728,16 +728,25 @@ a:hover { text-decoration: underline; }
   .meta-block { display: none; }
 }
 @media (max-width: 680px) {
-  /* Stack as normal page flow and let the whole page scroll. Using block (not a
-     fixed-height grid) is what stops the fire list from collapsing to nothing. */
+  /* Stack as normal page flow and let the whole page scroll. */
   body { overflow: auto; }
-  .layout { display: block; min-height: 0; }
-  .sidebar {
-    max-height: none; border-right: none; border-bottom: 1px solid var(--border);
-  }
+  /* Map-first ordering: dissolve the sidebar wrapper (display:contents) so its
+     children and the map become siblings, then order them so the interactive
+     map sits right below the stats and above the search controls. Desktop
+     keeps its two-column grid untouched. */
+  .layout { display: flex; flex-direction: column; min-height: 0; }
+  .sidebar { display: contents; }
+  .stats         { order: 1; }
+  .map-wrap      { order: 2; }
+  .controls      { order: 3; padding-top: 14px; }
+  .locate-banner { order: 4; }
+  .list-head     { order: 5; }
+  .fire-list     { order: 6; }
+  .seo-links     { order: 7; }
+  .sidebar-foot  { order: 8; }
   /* Definite scroll height so the 250-card list is browsable, not collapsed. */
   .fire-list { flex: 0 1 auto; max-height: 46vh; }
-  .map-wrap { height: 66vh; min-height: 380px; }
+  .map-wrap { height: 62vh; min-height: 380px; border-bottom: 1px solid var(--border); }
   .brand-text p { display: none; }
   .refresh-btn span { display: none; }
   .refresh-btn { padding: 9px; }
