@@ -234,6 +234,9 @@ a:hover { text-decoration: underline; }
   font-size: 11px; color: var(--text-dim); font-weight: 500;
 }
 
+/* Mobile-only safety strip — hidden on desktop (news panel carries it there) */
+.safety-note { display: none; }
+
 /* Controls */
 .controls { padding: 4px 16px 14px; display: flex; flex-direction: column; gap: 10px; }
 
@@ -739,13 +742,31 @@ a:hover { text-decoration: underline; }
   .layout { display: flex; flex-direction: column; flex: 0 0 auto; height: auto; min-height: 0; }
   .sidebar { display: contents; }
   .stats         { order: 1; }
-  .map-wrap      { order: 2; }
-  .controls      { order: 3; padding-top: 14px; }
-  .locate-banner { order: 4; }
-  .list-head     { order: 5; }
-  .fire-list     { order: 6; }
-  .seo-links     { order: 7; }
-  .sidebar-foot  { order: 8; }
+  .safety-note   { order: 2; }
+  .map-wrap      { order: 3; }
+  .controls      { order: 4; padding-top: 14px; }
+  .locate-banner { order: 5; }
+  .list-head     { order: 6; }
+  .fire-list     { order: 7; }
+  .seo-links     { order: 8; }
+  .sidebar-foot  { order: 9; }
+
+  /* Compact stat cards — free vertical space so the map is higher up. */
+  .stats { padding: 10px 16px 8px; gap: 8px; }
+  .stat-card { padding: 8px 11px 7px; }
+  .stat-value { font-size: 17px; }
+  .stat-label { font-size: 10px; margin-top: 1px; }
+
+  /* The safety notice lives between the stats and the map on phones… */
+  .safety-note {
+    display: block; margin: 0 16px 10px; padding: 7px 11px;
+    font-size: 10.5px; line-height: 1.45; color: var(--text-dim);
+    background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.22);
+    border-radius: 9px;
+  }
+  .safety-note strong { color: var(--amber); }
+  /* …so the news bottom sheet drops its copy of it — more room for news. */
+  .np-disclaimer { display: none; }
   /* Definite scroll height so the 250-card list is browsable, not collapsed. */
   .fire-list { flex: 0 1 auto; max-height: 54vh; }
   /* Clear breathing room so the explore-links block reads as a separate

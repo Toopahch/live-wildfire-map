@@ -81,7 +81,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
   <a class="skip-link" href="#fire-list">Skip to fire list</a>
@@ -167,6 +167,13 @@
           <span class="stat-label">States affected</span>
         </article>
       </section>
+
+      <!-- Mobile-only safety strip (sits between the stats and the map there;
+           on desktop this stays hidden — the news panel carries the notice). -->
+      <p class="safety-note">
+        <strong>Always follow local authorities</strong> for evacuation orders and
+        emergency information. This map is for situational awareness only.
+      </p>
 
       <section class="controls">
         <div class="search-box">
