@@ -20,8 +20,8 @@ window.WF_CONFIG = Object.freeze({
    *  visible news only. Leave blank to run the map without the news feature.
    * ---------------------------------------------------------------------- */
   supabase: {
-    url: '',       // e.g. 'https://abcdefgh.supabase.co'
-    anonKey: ''    // the "anon public" key
+    url: 'https://gvmbqgbswuthbfidnqof.supabase.co',
+    anonKey: 'sb_publishable_rcumbPw2zCet7ugHkH5SdQ_cbkFVzlh' // publishable key — safe to expose (read-only via RLS)
   },
 
   /* Initial map framing — continental United States. */
